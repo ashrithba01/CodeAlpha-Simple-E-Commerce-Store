@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Simple Store</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background: #f4f4f4; }
+        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .header-actions { display: flex; gap: 20px; align-items: center; }
+        #product-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
+        .card { background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .btn { background: #28a745; color: white; border: none; padding: 10px; cursor: pointer; width: 100%; border-radius: 4px; font-size: 16px;}
+        .btn:hover { background: #218838; }
+        #cart-container { background: white; padding: 15px; border-radius: 8px; margin-top: 30px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>My E-Commerce Store</h1>
+        <div class="header-actions">
+            <h3 id="user-greeting" style="margin: 0;"></h3>
+            <button id="orders-btn" class="btn" style="width: auto; background: #17a2b8; display: none;" onclick="window.location.href='/orders/'">My Orders</button>
+            <button id="auth-btn" class="btn" style="width: auto; background: #6c757d;">Log In</button>
+            <h3 style="margin: 0;">Cart: <span id="cart-count">0</span></h3>
+        </div>
+    </header>
+
+    <div id="product-list"></div>
+
+    <div id="cart-container">
+        <h2>Your Cart</h2>
+        <ul id="cart-items"></ul>
+        <button class="btn" style="background: #007bff;" onclick="processCheckout()">Checkout</button>
+    </div>
+
+    <script>
+        function checkAuthStatus() {
+            const username = localStorage.getItem('username');
+            const greeting = document.getElementById('user-greeting');
+            const authBtn = document.getElementById('auth-btn');
+            const ordersBtn = document.getElementById('orders-btn');
+
+            if (username) {
+                greeting.innerText = `Hello, ${username}!`;
+                ordersBtn.style.display = 'block'; 
+                authBtn.innerText = "Log Out";
+                authBtn.style.background = "#dc3545"; 
+                authBtn.onclick = async () => {
+                    await fetch('/api/logout/', { method: 'POST' });
+                    localStorage.removeItem('username');
+                    window.location.reload();
+                };
+            } else {
+                greeting.innerText = "";
+                ordersBtn.style.display = 'none'; 
+                authBtn.innerText = "Log In";
+                authBtn.style.background = "#6c757d";
+                authBtn.onclick = () => window.location.href = '/auth/';
+            }
+        }
+
+        async function fetchProducts() {
+            const response = await fetch('/api/products/');
+            const products = await response.json();
+            const productList = document.getElementById('product-list');
+
+            products.forEach(product => {
+                const imgUrl = product.image_url || 'https://via.placeholder.com/200?text=No+Image';
+                const div = document.createElement('div');
+                div.className = 'card';
+                div.innerHTML = `
+                    <img src="${imgUrl}" alt="${product.name}" style="width: 100%; height: 200px; object-fit: cover; border-radius: 4px; margin-bottom: 10px;">
+                    <h3 style="margin: 0 0 10px 0;">${product.name}</h3>
+                    <p style="margin: 0 0 15px 0;">$${product.price}</p>
+                    <button class="btn" onclick="addToCart(${product.id}, '${product.name}', ${product.price})">Add to Cart</button>
+                `;
+                productList.appendChild(div);
+            });
+        }
+
+        function addToCart(id, name, price) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            let item = cart.find(i => i.id === id);
+            
+            if (item) {
+                item.qty++;
+            } else {
+                cart.push({ id, name, price, qty: 1 });
+            }
+            
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            document.getElementById('cart-count').innerText = cart.reduce((sum, item) => sum + item.qty, 0);
+            
+            const cartItems = document.getElementById('cart-items');
+            cartItems.innerHTML = '';
+            cart.forEach(item => {
+                cartItems.innerHTML += `<li>${item.qty}x ${item.name} - $${(item.price * item.qty).toFixed(2)}</li>`;
+            });
+        }
+
+        async function processCheckout() {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            
+            if (cart.length === 0) {
+                alert("Your cart is empty!");
+                return;
+            }
+
+            const response = await fetch('/api/checkout/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ cart: cart })
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                alert(`Success! Your order has been placed. Order ID: #${data.order_id}`);
+                localStorage.removeItem('cart'); 
+                updateCartUI(); 
+            } else {
+                alert("There was an error processing your order.");
+            }
+        }
+
+        checkAuthStatus();
+        fetchProducts();
+        updateCartUI();
+    </script>
+</body>
+</html>

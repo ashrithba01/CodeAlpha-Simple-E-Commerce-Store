@@ -2,16 +2,114 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Simple Store</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My E-Commerce Store</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background: #f4f4f4; }
-        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .header-actions { display: flex; gap: 20px; align-items: center; }
-        #product-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
-        .card { background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .btn { background: #28a745; color: white; border: none; padding: 10px; cursor: pointer; width: 100%; border-radius: 4px; font-size: 16px;}
-        .btn:hover { background: #218838; }
-        #cart-container { background: white; padding: 15px; border-radius: 8px; margin-top: 30px; }
+        /* --- GLOBAL STYLES --- */
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --bg-color: #f8fafc;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --card-bg: #ffffff;
+        }
+        
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            margin: 0; 
+            background-color: var(--bg-color); 
+            color: var(--text-main);
+        }
+
+        /* --- NAVIGATION BAR --- */
+        header { 
+            background: var(--card-bg); 
+            padding: 15px 40px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        header h1 { margin: 0; font-size: 24px; font-weight: 600; color: var(--primary); }
+        
+        .header-actions { display: flex; gap: 15px; align-items: center; }
+        .header-actions h3 { margin: 0; font-size: 16px; font-weight: 400;}
+        .cart-badge { background: var(--primary); color: white; padding: 4px 10px; border-radius: 20px; font-weight: 600; font-size: 14px;}
+
+        /* --- BUTTONS --- */
+        .btn { 
+            background: var(--primary); 
+            color: white; 
+            border: none; 
+            padding: 10px 20px; 
+            cursor: pointer; 
+            border-radius: 6px; 
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.2s ease-in-out;
+            font-family: 'Poppins', sans-serif;
+        }
+        .btn:hover { background: var(--primary-hover); transform: translateY(-1px); }
+        .btn-outline { background: transparent; border: 2px solid var(--text-muted); color: var(--text-muted); }
+        .btn-outline:hover { background: var(--text-muted); color: white; }
+        .btn-danger { background: #ef4444; }
+        .btn-danger:hover { background: #dc2626; }
+
+        /* --- LAYOUT & GRID --- */
+        .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+        
+        #product-list { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); 
+            gap: 25px; 
+        }
+
+        /* --- PRODUCT CARDS --- */
+        .card { 
+            background: var(--card-bg); 
+            border-radius: 12px; 
+            padding: 20px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); 
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            display: flex;
+            flex-direction: column;
+        }
+        .card:hover { 
+            transform: translateY(-5px); 
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); 
+        }
+        .card img { 
+            width: 100%; 
+            height: 200px; 
+            object-fit: cover; 
+            border-radius: 8px; 
+            margin-bottom: 15px;
+        }
+        .card h3 { margin: 0 0 5px 0; font-size: 18px; }
+        .card p { margin: 0 0 20px 0; color: var(--text-muted); font-weight: 600; font-size: 16px;}
+        .card .btn { margin-top: auto; width: 100%; }
+
+        /* --- CART SECTION --- */
+        #cart-container { 
+            background: var(--card-bg); 
+            padding: 30px; 
+            border-radius: 12px; 
+            margin-top: 50px; 
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+        }
+        #cart-items { list-style: none; padding: 0; margin-bottom: 20px;}
+        #cart-items li { 
+            padding: 10px 0; 
+            border-bottom: 1px solid #e2e8f0; 
+            display: flex;
+            justify-content: space-between;
+        }
     </style>
 </head>
 <body>
@@ -19,22 +117,26 @@
     <header>
         <h1>My E-Commerce Store</h1>
         <div class="header-actions">
-            <h3 id="user-greeting" style="margin: 0;"></h3>
-            <button id="orders-btn" class="btn" style="width: auto; background: #17a2b8; display: none;" onclick="window.location.href='/orders/'">My Orders</button>
-            <button id="auth-btn" class="btn" style="width: auto; background: #6c757d;">Log In</button>
-            <h3 style="margin: 0;">Cart: <span id="cart-count">0</span></h3>
+            <h3 id="user-greeting"></h3>
+            <button id="orders-btn" class="btn btn-outline" style="display: none;" onclick="window.location.href='/orders/'">My Orders</button>
+            <button id="auth-btn" class="btn btn-outline">Log In</button>
+            <h3>Cart <span id="cart-count" class="cart-badge">0</span></h3>
         </div>
     </header>
 
-    <div id="product-list"></div>
+    <div class="container">
+        <div id="product-list">
+            </div>
 
-    <div id="cart-container">
-        <h2>Your Cart</h2>
-        <ul id="cart-items"></ul>
-        <button class="btn" style="background: #007bff;" onclick="processCheckout()">Checkout</button>
+        <div id="cart-container">
+            <h2 style="margin-top:0;">Shopping Cart</h2>
+            <ul id="cart-items"></ul>
+            <button class="btn" style="width: 100%; font-size: 16px; padding: 15px;" onclick="processCheckout()">Complete Checkout</button>
+        </div>
     </div>
 
     <script>
+        // --- ALL JAVASCRIPT REMAINS EXACTLY THE SAME ---
         function checkAuthStatus() {
             const username = localStorage.getItem('username');
             const greeting = document.getElementById('user-greeting');
@@ -42,10 +144,10 @@
             const ordersBtn = document.getElementById('orders-btn');
 
             if (username) {
-                greeting.innerText = `Hello, ${username}!`;
+                greeting.innerText = `Welcome, ${username}`;
                 ordersBtn.style.display = 'block'; 
                 authBtn.innerText = "Log Out";
-                authBtn.style.background = "#dc3545"; 
+                authBtn.className = "btn btn-danger"; 
                 authBtn.onclick = async () => {
                     await fetch('/api/logout/', { method: 'POST' });
                     localStorage.removeItem('username');
@@ -55,7 +157,7 @@
                 greeting.innerText = "";
                 ordersBtn.style.display = 'none'; 
                 authBtn.innerText = "Log In";
-                authBtn.style.background = "#6c757d";
+                authBtn.className = "btn btn-outline";
                 authBtn.onclick = () => window.location.href = '/auth/';
             }
         }
@@ -66,13 +168,13 @@
             const productList = document.getElementById('product-list');
 
             products.forEach(product => {
-                const imgUrl = product.image_url || 'https://via.placeholder.com/200?text=No+Image';
+                const imgUrl = product.image_url || 'https://via.placeholder.com/400x300?text=No+Image';
                 const div = document.createElement('div');
                 div.className = 'card';
                 div.innerHTML = `
-                    <img src="${imgUrl}" alt="${product.name}" style="width: 100%; height: 200px; object-fit: cover; border-radius: 4px; margin-bottom: 10px;">
-                    <h3 style="margin: 0 0 10px 0;">${product.name}</h3>
-                    <p style="margin: 0 0 15px 0;">$${product.price}</p>
+                    <img src="${imgUrl}" alt="${product.name}">
+                    <h3>${product.name}</h3>
+                    <p>$${product.price}</p>
                     <button class="btn" onclick="addToCart(${product.id}, '${product.name}', ${product.price})">Add to Cart</button>
                 `;
                 productList.appendChild(div);
@@ -99,8 +201,18 @@
             
             const cartItems = document.getElementById('cart-items');
             cartItems.innerHTML = '';
+            
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<li style="border:none; color: #64748b;">Your cart is empty.</li>';
+                return;
+            }
+
             cart.forEach(item => {
-                cartItems.innerHTML += `<li>${item.qty}x ${item.name} - $${(item.price * item.qty).toFixed(2)}</li>`;
+                cartItems.innerHTML += `
+                    <li>
+                        <span><strong>${item.qty}x</strong> ${item.name}</span>
+                        <span>$${(item.price * item.qty).toFixed(2)}</span>
+                    </li>`;
             });
         }
 

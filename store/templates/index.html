@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My E-Commerce Store</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         /* --- GLOBAL STYLES --- */
         :root {
             --primary: #2563eb;
             --primary-hover: #1d4ed8;
-            --bg-color: #f8fafc;
-            --text-main: #1e293b;
+            --bg-color: #f1f5f9;
+            --text-main: #0f172a;
             --text-muted: #64748b;
             --card-bg: #ffffff;
         }
@@ -25,118 +25,182 @@
 
         /* --- NAVIGATION BAR --- */
         header { 
-            background: var(--card-bg); 
-            padding: 15px 40px; 
+            background: rgba(255, 255, 255, 0.95); 
+            backdrop-filter: blur(10px);
+            padding: 15px 5%; 
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
             position: sticky;
             top: 0;
             z-index: 100;
         }
         
-        header h1 { margin: 0; font-size: 24px; font-weight: 600; color: var(--primary); }
+        header h1 { margin: 0; font-size: 24px; font-weight: 700; color: var(--primary); letter-spacing: -0.5px;}
         
-        .header-actions { display: flex; gap: 15px; align-items: center; }
-        .header-actions h3 { margin: 0; font-size: 16px; font-weight: 400;}
-        .cart-badge { background: var(--primary); color: white; padding: 4px 10px; border-radius: 20px; font-weight: 600; font-size: 14px;}
+        .header-actions { display: flex; gap: 20px; align-items: center; }
+        .header-actions h3 { margin: 0; font-size: 15px; font-weight: 400;}
+        .cart-badge { background: #ef4444; color: white; padding: 4px 12px; border-radius: 20px; font-weight: 600; font-size: 13px; margin-left: 5px;}
 
         /* --- BUTTONS --- */
         .btn { 
-            background: var(--primary); 
-            color: white; 
-            border: none; 
-            padding: 10px 20px; 
-            cursor: pointer; 
-            border-radius: 6px; 
-            font-size: 14px;
-            font-weight: 600;
-            transition: all 0.2s ease-in-out;
+            background: var(--primary); color: white; border: none; padding: 12px 24px; 
+            cursor: pointer; border-radius: 8px; font-size: 14px; font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             font-family: 'Poppins', sans-serif;
         }
-        .btn:hover { background: var(--primary-hover); transform: translateY(-1px); }
-        .btn-outline { background: transparent; border: 2px solid var(--text-muted); color: var(--text-muted); }
-        .btn-outline:hover { background: var(--text-muted); color: white; }
-        .btn-danger { background: #ef4444; }
-        .btn-danger:hover { background: #dc2626; }
+        .btn:hover { background: var(--primary-hover); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3); }
+        .btn-outline { background: transparent; border: 2px solid #cbd5e1; color: var(--text-main); }
+        .btn-outline:hover { border-color: var(--text-main); background: transparent; box-shadow: none;}
+        .btn-danger { background: transparent; color: #ef4444; border: 2px solid #fca5a5;}
+        .btn-danger:hover { background: #ef4444; color: white; border-color: #ef4444; box-shadow: none;}
 
         /* --- LAYOUT & GRID --- */
-        .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 40px 5%; }
         
+        /* --- HERO SECTION --- */
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, #60a5fa 100%);
+            border-radius: 24px;
+            padding: 60px 40px;
+            color: white;
+            text-align: center;
+            margin-bottom: 50px;
+            box-shadow: 0 20px 40px -10px rgba(37, 99, 235, 0.3);
+        }
+        .hero h2 { margin: 0 0 10px 0; font-size: 36px; font-weight: 700; }
+        .hero p { margin: 0; font-size: 18px; opacity: 0.9; font-weight: 300;}
+
         #product-list { 
             display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); 
-            gap: 25px; 
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); 
+            gap: 30px; 
         }
 
         /* --- PRODUCT CARDS --- */
         .card { 
             background: var(--card-bg); 
-            border-radius: 12px; 
+            border-radius: 16px; 
             padding: 20px;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); 
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.03), 0 2px 4px -2px rgba(0,0,0,0.03); 
+            transition: all 0.3s ease;
             display: flex;
             flex-direction: column;
+            border: 1px solid #f1f5f9;
         }
         .card:hover { 
-            transform: translateY(-5px); 
-            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); 
+            transform: translateY(-8px); 
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1); 
+            border-color: #e2e8f0;
         }
         .card img { 
             width: 100%; 
-            height: 200px; 
+            height: 220px; 
             object-fit: cover; 
-            border-radius: 8px; 
-            margin-bottom: 15px;
+            border-radius: 12px; 
+            margin-bottom: 20px;
+            background-color: #f8fafc;
         }
-        .card h3 { margin: 0 0 5px 0; font-size: 18px; }
-        .card p { margin: 0 0 20px 0; color: var(--text-muted); font-weight: 600; font-size: 16px;}
+        .card h3 { margin: 0 0 8px 0; font-size: 18px; font-weight: 600; color: var(--text-main);}
+        .card p { margin: 0 0 20px 0; color: var(--primary); font-weight: 700; font-size: 18px;}
         .card .btn { margin-top: auto; width: 100%; }
 
         /* --- CART SECTION --- */
         #cart-container { 
             background: var(--card-bg); 
-            padding: 30px; 
-            border-radius: 12px; 
-            margin-top: 50px; 
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            padding: 40px; 
+            border-radius: 24px; 
+            margin-top: 60px; 
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05);
+            border: 1px solid #f1f5f9;
         }
-        #cart-items { list-style: none; padding: 0; margin-bottom: 20px;}
+        #cart-items { list-style: none; padding: 0; margin-bottom: 30px;}
         #cart-items li { 
-            padding: 10px 0; 
-            border-bottom: 1px solid #e2e8f0; 
+            padding: 15px 0; 
+            border-bottom: 1px solid #f1f5f9; 
             display: flex;
             justify-content: space-between;
+            align-items: center;
+            font-size: 16px;
         }
+        #cart-items li:last-child { border-bottom: none; }
+        .cart-total-row {
+            display: flex; justify-content: space-between; font-size: 20px; font-weight: 700;
+            padding: 20px 0; border-top: 2px solid #e2e8f0; margin-bottom: 20px;
+        }
+
+        /* --- TOAST NOTIFICATIONS --- */
+        #toast-container {
+            position: fixed; bottom: 30px; right: 30px; z-index: 1000;
+            display: flex; flex-direction: column; gap: 10px;
+        }
+        .toast {
+            background: #1e293b; color: white; padding: 16px 24px; border-radius: 12px;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); font-size: 14px; font-weight: 500;
+            opacity: 0; transform: translateX(50px); transition: all 0.3s ease;
+        }
+        .toast.show { opacity: 1; transform: translateX(0); }
+        .toast.success { background: #10b981; }
+        .toast.error { background: #ef4444; }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>My E-Commerce Store</h1>
+        <h1>Ashrith's Store</h1>
         <div class="header-actions">
             <h3 id="user-greeting"></h3>
             <button id="orders-btn" class="btn btn-outline" style="display: none;" onclick="window.location.href='/orders/'">My Orders</button>
             <button id="auth-btn" class="btn btn-outline">Log In</button>
-            <h3>Cart <span id="cart-count" class="cart-badge">0</span></h3>
+            <h3>Cart<span id="cart-count" class="cart-badge">0</span></h3>
         </div>
     </header>
 
     <div class="container">
+        
+        <div class="hero">
+            <h2>Summer Collection 2026</h2>
+            <p>Discover premium products curated just for you. Free shipping on all orders.</p>
+        </div>
+
         <div id="product-list">
             </div>
 
         <div id="cart-container">
-            <h2 style="margin-top:0;">Shopping Cart</h2>
+            <h2 style="margin-top:0; font-size: 24px; margin-bottom: 20px;">Your Shopping Cart</h2>
             <ul id="cart-items"></ul>
-            <button class="btn" style="width: 100%; font-size: 16px; padding: 15px;" onclick="processCheckout()">Complete Checkout</button>
+            <div class="cart-total-row">
+                <span>Total Amount:</span>
+                <span id="cart-total-price">₹0.00</span>
+            </div>
+            <button class="btn" style="width: 100%; font-size: 18px; padding: 18px; border-radius: 12px;" onclick="processCheckout()">Secure Checkout</button>
         </div>
     </div>
 
+    <div id="toast-container"></div>
+
     <script>
-        // --- ALL JAVASCRIPT REMAINS EXACTLY THE SAME ---
+        // --- TOAST NOTIFICATION SYSTEM ---
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerText = message;
+            
+            container.appendChild(toast);
+            
+            // Trigger animation
+            setTimeout(() => toast.classList.add('show'), 10);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // --- CORE LOGIC ---
         function checkAuthStatus() {
             const username = localStorage.getItem('username');
             const greeting = document.getElementById('user-greeting');
@@ -144,7 +208,7 @@
             const ordersBtn = document.getElementById('orders-btn');
 
             if (username) {
-                greeting.innerText = `Welcome, ${username}`;
+                greeting.innerHTML = `Welcome, <strong>${username}</strong>`;
                 ordersBtn.style.display = 'block'; 
                 authBtn.innerText = "Log Out";
                 authBtn.className = "btn btn-danger"; 
@@ -163,22 +227,31 @@
         }
 
         async function fetchProducts() {
-            const response = await fetch('/api/products/');
-            const products = await response.json();
-            const productList = document.getElementById('product-list');
+            try {
+                const response = await fetch('/api/products/');
+                const products = await response.json();
+                const productList = document.getElementById('product-list');
 
-            products.forEach(product => {
-                const imgUrl = product.image_url || 'https://via.placeholder.com/400x300?text=No+Image';
-                const div = document.createElement('div');
-                div.className = 'card';
-                div.innerHTML = `
-                    <img src="${imgUrl}" alt="${product.name}">
-                    <h3>${product.name}</h3>
-                    <p>$${product.price}</p>
-                    <button class="btn" onclick="addToCart(${product.id}, '${product.name}', ${product.price})">Add to Cart</button>
-                `;
-                productList.appendChild(div);
-            });
+                products.forEach(product => {
+                    // Check if image exists, otherwise use a beautiful generic gradient placeholder
+                    const imgUrl = (product.image_url && product.image_url !== "") 
+                        ? product.image_url 
+                        : 'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80';
+
+                    const div = document.createElement('div');
+                    div.className = 'card';
+                    div.innerHTML = `
+                        <img src="${imgUrl}" alt="${product.name}" onerror="this.src='https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80'">
+                        <h3>${product.name}</h3>
+                        <p>₹${parseFloat(product.price).toFixed(2)}</p>
+                        <button class="btn" onclick="addToCart(${product.id}, '${product.name}', ${product.price})">Add to Cart</button>
+                    `;
+                    productList.appendChild(div);
+                });
+            } catch (error) {
+                console.error("Error fetching products:", error);
+                showToast("Could not load products.", "error");
+            }
         }
 
         function addToCart(id, name, price) {
@@ -193,54 +266,70 @@
             
             localStorage.setItem('cart', JSON.stringify(cart));
             updateCartUI();
+            showToast(`Added ${name} to your cart!`);
         }
 
         function updateCartUI() {
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
-            document.getElementById('cart-count').innerText = cart.reduce((sum, item) => sum + item.qty, 0);
+            let totalItems = 0;
+            let totalPrice = 0;
             
             const cartItems = document.getElementById('cart-items');
             cartItems.innerHTML = '';
             
             if (cart.length === 0) {
-                cartItems.innerHTML = '<li style="border:none; color: #64748b;">Your cart is empty.</li>';
+                cartItems.innerHTML = '<li style="color: var(--text-muted); justify-content: center;">Your cart is beautifully empty.</li>';
+                document.getElementById('cart-count').innerText = "0";
+                document.getElementById('cart-total-price').innerText = "₹0.00";
                 return;
             }
 
             cart.forEach(item => {
+                totalItems += item.qty;
+                const itemTotal = item.price * item.qty;
+                totalPrice += itemTotal;
+
                 cartItems.innerHTML += `
                     <li>
-                        <span><strong>${item.qty}x</strong> ${item.name}</span>
-                        <span>$${(item.price * item.qty).toFixed(2)}</span>
+                        <span><strong style="color:var(--primary); background:#eff6ff; padding: 4px 10px; border-radius: 8px; margin-right: 10px;">${item.qty}x</strong> ${item.name}</span>
+                        <span style="font-weight: 600;">₹${itemTotal.toFixed(2)}</span>
                     </li>`;
             });
+
+            document.getElementById('cart-count').innerText = totalItems;
+            document.getElementById('cart-total-price').innerText = `₹${totalPrice.toFixed(2)}`;
         }
 
         async function processCheckout() {
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
             
             if (cart.length === 0) {
-                alert("Your cart is empty!");
+                showToast("Your cart is empty!", "error");
                 return;
             }
 
-            const response = await fetch('/api/checkout/', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ cart: cart })
-            });
+            try {
+                const response = await fetch('/api/checkout/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ cart: cart })
+                });
 
-            const data = await response.json();
+                const data = await response.json();
 
-            if (data.success) {
-                alert(`Success! Your order has been placed. Order ID: #${data.order_id}`);
-                localStorage.removeItem('cart'); 
-                updateCartUI(); 
-            } else {
-                alert("There was an error processing your order.");
+                if (data.success) {
+                    showToast(`Order #${data.order_id} placed successfully!`, "success");
+                    localStorage.removeItem('cart'); 
+                    updateCartUI(); 
+                } else {
+                    showToast("Error processing your order.", "error");
+                }
+            } catch (error) {
+                showToast("Server error. Please log in first.", "error");
             }
         }
 
+        // Initialize Page
         checkAuthStatus();
         fetchProducts();
         updateCartUI();

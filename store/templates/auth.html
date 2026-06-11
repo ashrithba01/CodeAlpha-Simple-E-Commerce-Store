@@ -2,36 +2,86 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login / Register</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        body { font-family: Arial, sans-serif; background: #f4f4f4; display: flex; justify-content: center; padding-top: 50px; }
-        .auth-container { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; }
-        input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;}
-        .btn { background: #007bff; color: white; border: none; padding: 10px; cursor: pointer; width: 100%; border-radius: 4px; font-size: 16px;}
-        .btn:hover { background: #0056b3; }
-        .toggle-text { text-align: center; margin-top: 15px; font-size: 14px; cursor: pointer; color: #007bff; }
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --bg-color: #f8fafc;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --card-bg: #ffffff;
+        }
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background: var(--bg-color); 
+            color: var(--text-main);
+            display: flex; 
+            justify-content: center; 
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .auth-container { 
+            background: var(--card-bg); 
+            padding: 40px; 
+            border-radius: 12px; 
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); 
+            width: 100%; 
+            max-width: 400px; 
+        }
+        h2 { margin-top: 0; color: var(--primary); font-weight: 600; text-align: center; margin-bottom: 30px;}
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px; color: var(--text-muted);}
+        input { 
+            width: 100%; 
+            padding: 12px; 
+            border: 1px solid #cbd5e1; 
+            border-radius: 6px; 
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            transition: border-color 0.2s;
+        }
+        input:focus { outline: none; border-color: var(--primary); }
+        .btn { 
+            background: var(--primary); 
+            color: white; 
+            border: none; 
+            padding: 12px; 
+            cursor: pointer; 
+            width: 100%; 
+            border-radius: 6px; 
+            font-size: 16px;
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+            transition: background 0.2s;
+            margin-top: 10px;
+        }
+        .btn:hover { background: var(--primary-hover); }
+        .toggle-text { text-align: center; margin-top: 20px; font-size: 14px; cursor: pointer; color: var(--primary); font-weight: 600;}
+        .toggle-text:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
 
 <div class="auth-container">
-    <h2 id="form-title">Log In</h2>
+    <h2 id="form-title">Welcome Back</h2>
     
     <div class="form-group">
         <label>Username</label>
-        <input type="text" id="username" placeholder="Enter username">
+        <input type="text" id="username" placeholder="Enter your username">
     </div>
     <div class="form-group">
         <label>Password</label>
-        <input type="password" id="password" placeholder="Enter password">
+        <input type="password" id="password" placeholder="Enter your password">
     </div>
     
     <button class="btn" id="submit-btn" onclick="handleAuth()">Log In</button>
     
     <div class="toggle-text" onclick="toggleForm()">
-        <span id="toggle-msg">Don't have an account? Register here.</span>
+        <span id="toggle-msg">New here? Create an account</span>
     </div>
 </div>
 
@@ -40,9 +90,9 @@
 
     function toggleForm() {
         isLogin = !isLogin;
-        document.getElementById('form-title').innerText = isLogin ? "Log In" : "Register";
+        document.getElementById('form-title').innerText = isLogin ? "Welcome Back" : "Create Account";
         document.getElementById('submit-btn').innerText = isLogin ? "Log In" : "Sign Up";
-        document.getElementById('toggle-msg').innerText = isLogin ? "Don't have an account? Register here." : "Already have an account? Log in.";
+        document.getElementById('toggle-msg').innerText = isLogin ? "New here? Create an account" : "Already have an account? Log in.";
     }
 
     async function handleAuth() {
@@ -67,7 +117,6 @@
 
             if (data.success) {
                 localStorage.setItem('username', data.username);
-                alert(`Success! Welcome, ${data.username}`);
                 window.location.href = '/'; 
             } else {
                 alert(data.error || "Authentication failed.");
@@ -77,6 +126,5 @@
         }
     }
 </script>
-
 </body>
 </html>
